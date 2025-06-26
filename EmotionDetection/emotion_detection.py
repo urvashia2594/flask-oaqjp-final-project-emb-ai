@@ -9,13 +9,18 @@ def emotion_detector(text_to_analyze):
 
     response =  requests.post(URL, json = myobj, headers = header)
 
-    formmated_text = json.loads(response.text)
+    if response.status_code == 200:
 
-    emotions = formmated_text['emotionPredictions'][0]['emotion']
+        formmated_text = json.loads(response.text)
 
-    dominant_emotion = max(emotions, key = emotions.get)
+        emotions = formmated_text['emotionPredictions'][0]['emotion']
 
-    emotions['dominant_emotion'] = dominant_emotion
+        dominant_emotion = max(emotions, key = emotions.get)
 
-    return emotions
+        emotions['dominant_emotion'] = dominant_emotion
+
+        return emotions
+    elif response.status_code == 500:
+        return None
+
 
